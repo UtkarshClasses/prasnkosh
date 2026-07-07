@@ -95,6 +95,8 @@ getKeyNameByColumnName(columnName) {
       return "Exam";
     case "chapter":
       return "Chapter";
+    case "topic":
+      return "Topic";
     case "date":
       return "Date";
     case "year":
