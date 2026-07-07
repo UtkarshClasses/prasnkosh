@@ -1,43 +1,77 @@
+
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:gradient_container/gradient_container.dart';
 import 'package:teach_advance/utility/chipInList.dart';
 import 'package:teach_advance/utility/colors.dart' as colors;
 import 'package:teach_advance/utility/helper_functions.dart' as helperfunctions;
+import 'package:teach_advance/utility/open_set_action_button.dart';
 import 'package:teach_advance/utility/update_set_details.dart';
 
 import '../functions/homeScreenAddQuestionButtonClick.dart';
 import '../functions/homeScreenViewSelectedQuestionButtonClick.dart';
 
-Widget homeScreenSearchBar(list) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 6.0),
-    child: GFSearchBar(
-      searchBoxInputDecoration: const InputDecoration(
-        prefixIcon: Icon(
-          Icons.search,
-          size: 30,
+Widget homeScreenSearchBar(list,BuildContext context) {
+  return Row(
+
+    children: [
+
+      Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 6.0),
+          child: GFSearchBar(
+            searchBoxInputDecoration: const InputDecoration(
+              prefixIcon: Icon(
+                Icons.search,
+                size: 30,
+              ),
+              hintText: "Search set here ...",
+            ),
+            searchList: list,
+            searchQueryBuilder: (query, list) {
+              return list
+                  .where((item) =>
+                      item.toString().toLowerCase().contains(query.toLowerCase()))
+                  .toList();
+            },
+            noItemsFoundWidget: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text("No data found!"),
+            ),
+            overlaySearchListItemBuilder: (item) {
+              return suggestionList(item);
+            },
+            onItemSelected: (item) {
+              print(item);
+            },
+          ),
         ),
-        hintText: "Search set here ...",
       ),
-      searchList: list,
-      searchQueryBuilder: (query, list) {
-        return list
-            .where((item) =>
-                item.toString().toLowerCase().contains(query.toLowerCase()))
-            .toList();
-      },
-      noItemsFoundWidget: const Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Text("No data found!"),
+      InkWell(
+        onTap: () {
+          openSetFloatingActionButton(context);
+        },
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10.0),
+          child: const GradientContainer(
+            height: 36,
+            width: 100,
+            colors: [Colors.red, Colors.pink],
+            child: Center(
+              child: Text(
+                "Open Set",
+                style: TextStyle(
+                  fontFamily: "serif",
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
-      overlaySearchListItemBuilder: (item) {
-        return suggestionList(item);
-      },
-      onItemSelected: (item) {
-        print(item);
-      },
-    ),
+      const SizedBox(width: 10,)
+    ],
   );
 }
 

@@ -4,6 +4,7 @@ import 'package:teach_advance/utility/copySetToSearchBar.dart';
 
 copySet() {
   return Get.defaultDialog(
+
     content: copySetToSearchBar(),
     title: "Copy To",
     titlePadding:

@@ -5,6 +5,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:teach_advance/controllers/manage_showing_content.dart';
 import 'package:teach_advance/utility/question_view_default_mode.dart';
 import 'package:teach_advance/utility/question_view_list_mode.dart';
+import 'package:teach_advance/utility/settingsTransferSetDeleteButton.dart';
 import 'package:teach_advance/utility/widget_of_question_show_screen.dart';
 
 class QuestionSelectionScreen extends StatelessWidget {
@@ -13,7 +14,6 @@ class QuestionSelectionScreen extends StatelessWidget {
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
-
   void scrollToXIndex(index) {
     itemScrollController.scrollTo(
         index: index,
@@ -45,18 +45,17 @@ class QuestionSelectionScreen extends StatelessWidget {
               child: Column(
                 children: [
                   topbar1(context, Icons.widgets, title,
-                      "question_selection_screen"),
-                  // moreActionButtons(),
-                  topbar2(false, scrollToXIndex),
+                      "question_selection_screen",false),
+                  questaiolevelButton(),
+                  topbar2(false, scrollToXIndex,(position){}),
                 ],
               ),
             ),
           )
         ]),
-        Obx(() => questionPallete(
-              manageShowingContent.questionListForSelection.length,
-              scrollToXIndex,
-            )),
+      questionPallete(
+            manageShowingContent.questionListForSelection.length,
+            scrollToXIndex),
         Obx(() => (manageShowingContent.questionViewMode.value == 0)
             ? listMode(itemScrollController, itemPositionsListener)
             : questionViewDefaultMode()),

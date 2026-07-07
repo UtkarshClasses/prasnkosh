@@ -8,7 +8,7 @@ import 'package:teach_advance/screens/authentication.dart';
 import 'package:teach_advance/utility/global_variables.dart' as globalvariable;
 
 Future<void> getMySetsAPI() async {
-  getAppControlSettings();
+  // getAppControlSettings();
   final HomeScreenController homeScreenController =
       Get.put(HomeScreenController());
   final userDetails = GetStorage();

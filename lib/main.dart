@@ -1,12 +1,15 @@
 import 'dart:io';
+import 'dart:isolate';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:teach_advance/screens/entry_screen.dart';
-import 'screens/authentication.dart';
 
+import 'screens/authentication.dart';
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     systemNavigationBarColor: Colors.white, // navigation bar color
@@ -19,17 +22,44 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   configLoading();
-  runApp(const MyApp());
+
+
+
+// You can request multiple permissions at once.
+//   Map<Permission, PermissionStatus> statuses = await [
+//     Permission.location,
+//   ].request();
+
+  // if (await Permission.location.request().isGranted) {
+    runApp(const MyApp());
+
+  // } else {
+  //   await Permission.location.onDeniedCallback(() {
+  //     // Your code
+  //   }).onGrantedCallback(() {
+  //     // Your code
+  //     runApp(const MyApp());
+  //   }).onPermanentlyDeniedCallback(() {
+  //     // Your code
+  //   }).onRestrictedCallback(() {
+  //     // Your code
+  //   }).onLimitedCallback(() {
+  //     // Your code
+  //   }).onProvisionalCallback(() {
+  //     // Your code
+  //   }).request();
+  // }
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     final userDetails = GetStorage();
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Teach - for Teachers',
+      title: 'prasnKOSH',
       home: (userDetails.read("token") == null)
           ? const Authentication()
           : EntryScreen(

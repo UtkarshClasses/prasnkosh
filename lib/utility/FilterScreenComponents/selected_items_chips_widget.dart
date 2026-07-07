@@ -20,8 +20,9 @@ Widget selectedItemChips(list) {
                     vertical: 8.0,
                     horizontal: 12.0,
                   ),
+                  // "${list[i].title.toString()}(${list[i].id.toString()})",
                   child: Text(
-                    list[i].title.toString(),
+                    "${list[i].title.toString()}(${list[i].id.toString()})",
                     style: const TextStyle(
                         fontSize: 12.0,
                         color: Colors.white,

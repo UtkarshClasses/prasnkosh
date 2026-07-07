@@ -33,7 +33,10 @@ Widget mySetList(filterKey) {
                       children: [
                         ListTile(
                           title: Text(
-                            setList[index]['set_name'],
+                            setList[index]['set_name'] +
+                                " (" +
+                                setList[index]['set_id'] +
+                                ")",
                             style: const TextStyle(
                               fontSize: 12.0,
                               fontFamily: "Mont",

@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter_tex/flutter_tex.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+
 import 'package:teach_advance/utility/colors.dart' as colors;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -120,11 +121,11 @@ Widget getMathJxOrHtmlWidget(String s) {
     }
     return TeXView(
         onRenderFinished: (height) {
-          // height = height;
+          height = height;
         },
-        loadingWidgetBuilder: (context) => Container(
-              height: 20.0,
-            ),
+        // loadingWidgetBuilder: (context) => Container(
+        //       height: 20.0,
+        //     ),
         renderingEngine: const TeXViewRenderingEngine.katex(),
         child: TeXViewDocument(temp,
             style: TeXViewStyle(
@@ -132,13 +133,31 @@ Widget getMathJxOrHtmlWidget(String s) {
                 fontStyle:
                     TeXViewFontStyle(fontFamily: "Noto-Serif-Devnagri"))));
   } else if (s.contains(r"\(")) {
+    // return Math.tex(s, mathStyle: MathStyle.display);
     return TeXView(
         onRenderFinished: (height) {
-          // height = 20.0;
+          height = height;
         },
-        loadingWidgetBuilder: (context) => Container(
-              height: 20.0,
-            ),
+        // loadingWidgetBuilder: (context) => Container(
+        //       height: 20.0,
+        //     ),
+        renderingEngine: const TeXViewRenderingEngine.katex(),
+        child: TeXViewInkWell(
+            child: TeXViewDocument(s,
+                style: const TeXViewStyle(
+                  // height: height,
+                  margin: TeXViewMargin.zeroAuto(),
+                  textAlign: TeXViewTextAlign.left,
+                )),
+            id: 'id_0'));
+  } else if (s.contains("math-tex")) {
+    return TeXView(
+        onRenderFinished: (height) {
+          height = height;
+        },
+        // loadingWidgetBuilder: (context) => Container(
+        //       height: 20.0,
+        //     ),
         renderingEngine: const TeXViewRenderingEngine.katex(),
         child: TeXViewDocument(s,
             style: TeXViewStyle(

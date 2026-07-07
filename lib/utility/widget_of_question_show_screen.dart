@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:teach_advance/apis/checkEditorAccessPermissionAPI.dart';
 import 'package:teach_advance/apis/deleteSetAPI.dart';
 import 'package:teach_advance/apis/getMySetsAPI.dart';
@@ -19,7 +21,7 @@ import 'package:teach_advance/utility/PaddingWidget.dart';
 import 'package:teach_advance/utility/app_bar_custom.dart';
 import 'package:teach_advance/utility/circularBox.dart';
 import 'package:teach_advance/utility/containerPro.dart';
-import 'package:teach_advance/utility/copySet.dart';
+import 'package:teach_advance/utility/copySetToSearchBar.dart';
 import 'package:teach_advance/utility/helper_functions.dart';
 import 'package:teach_advance/utility/icons.dart';
 import 'package:teach_advance/utility/jump_to_x_index.dart';
@@ -29,155 +31,335 @@ import 'package:teach_advance/utility/question_select_checkbox_all_time_used_lis
 import 'package:teach_advance/utility/report_error_modal.dart';
 import 'package:teach_advance/utility/select_all_question_button.dart';
 import 'package:teach_advance/utility/set_setting_modal.dart';
+
 import 'language_toggle_button.dart';
 import 'solutionBoxWidget.dart';
 
+final ManageShowingContent manageShowingContent =
+    Get.put(ManageShowingContent());
+
+Widget questionAndOptionAndSolutionWeb(questionsList) {
+  return questionsList[manageShowingContent.questionListVisibleIndex.value][
+              manageShowingContent.language.value == "hin"
+                  ? "question_hin"
+                  : "question_eng"] !=
+          null
+      ? ListView(
+          children: [
+            Container(
+              height: 200,
+              child: Obx(
+                () => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    questionWidget(questionsList[
+                            manageShowingContent.questionListVisibleIndex.value]
+                        [manageShowingContent.language.value == "hin"
+                            ? "question_hin"
+                            : "question_eng"]),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        previousOfWidget(questionsList[manageShowingContent
+                                .questionListVisibleIndex
+                                .value]['previous_of'] ??
+                            ""),
+                        InkWell(
+                            onTap: () {
+                              Clipboard.setData(ClipboardData(
+                                      text: questionsList[manageShowingContent
+                                          .questionListVisibleIndex
+                                          .value]["record_id"]))
+                                  .then((_) {
+                                EasyLoading.showToast("Question's id copied");
+                              });
+                            },
+                            child: Icon(Icons.copy))
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            )
+            // paddingOnly(
+            //   4.0,
+            //   8.0,
+            //   4.0,
+            //   8.0,
+            //   GestureDetector(
+            //     onDoubleTap: () async {
+            //       EasyLoading.show(dismissOnTap: true);
+            //       var editingAccess = await checkEditorAccessAPI();
+            //       if (editingAccess) {
+            //         modalForChooseLanguageForEditing();
+            //       }
+            //     },
+            //     child: Obx(
+            //       () => Column(
+            //         crossAxisAlignment: CrossAxisAlignment.start,
+            //         children: [
+            //           questionWidget(questionsList[manageShowingContent
+            //                   .questionListVisibleIndex.value][
+            //               manageShowingContent.language.value == "hin"
+            //                   ? "question_hin"
+            //                   : "question_eng"]),
+            //           Row(
+            //             mainAxisAlignment: MainAxisAlignment.end,
+            //             children: [
+            //               previousOfWidget(questionsList[manageShowingContent
+            //                       .questionListVisibleIndex
+            //                       .value]['previous_of'] ??
+            //                   ""),
+            //               InkWell(
+            //                   onTap: () {
+            //                     Clipboard.setData(ClipboardData(
+            //                             text: questionsList[manageShowingContent
+            //                                 .questionListVisibleIndex
+            //                                 .value]["record_id"]))
+            //                         .then((_) {
+            //                       EasyLoading.showToast("Question's id copied");
+            //                     });
+            //                   },
+            //                   child: Icon(Icons.copy))
+            //             ],
+            //           )
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // paddingOnly(
+            //   26.0,
+            //   10.0,
+            //   2.0,
+            //   10.0,
+            //   Column(
+            //     children: [
+            //       Obx(() => (optionBox(
+            //           "A",
+            //           questionsList[manageShowingContent
+            //                   .questionListVisibleIndex.value][
+            //               manageShowingContent.language.value == "hin"
+            //                   ? "option1_hin"
+            //                   : "option1_eng"],
+            //           questionsList[manageShowingContent
+            //               .questionListVisibleIndex.value]['answer']))),
+            //       Obx(() => (optionBox(
+            //           "B",
+            //           questionsList[manageShowingContent
+            //                   .questionListVisibleIndex.value][
+            //               manageShowingContent.language.value == "hin"
+            //                   ? "option2_hin"
+            //                   : "option2_eng"],
+            //           questionsList[manageShowingContent
+            //               .questionListVisibleIndex.value]['answer']))),
+            //       Obx(() => (optionBox(
+            //           "C",
+            //           questionsList[manageShowingContent
+            //                   .questionListVisibleIndex.value][
+            //               manageShowingContent.language.value == "hin"
+            //                   ? "option3_hin"
+            //                   : "option3_eng"],
+            //           questionsList[manageShowingContent
+            //               .questionListVisibleIndex.value]['answer']))),
+            //       Obx(() => (optionBox(
+            //           "D",
+            //           questionsList[manageShowingContent
+            //                   .questionListVisibleIndex.value][
+            //               manageShowingContent.language.value == "hin"
+            //                   ? "option4_hin"
+            //                   : "option4_eng"],
+            //           questionsList[manageShowingContent
+            //               .questionListVisibleIndex.value]['answer']))),
+            //
+            //       // // operation for 5th option
+            //       (questionsList[manageShowingContent
+            //                   .questionListVisibleIndex.value]['option5_hin'] ==
+            //               "")
+            //           ? Container()
+            //           : optionBox(
+            //               "E",
+            //               questionsList[manageShowingContent
+            //                       .questionListVisibleIndex.value][
+            //                   manageShowingContent.language.value == "hin"
+            //                       ? "option5_hin"
+            //                       : "option5_eng"],
+            //               questionsList[manageShowingContent
+            //                   .questionListVisibleIndex.value]['answer']),
+            //     ],
+            //   ),
+            // ),
+            // Obx(() => solutionBox(questionsList[
+            //         manageShowingContent.questionListVisibleIndex.value][
+            //     manageShowingContent.language.value == "hin"
+            //         ? "solution_hin"
+            //         : "solution_eng"])),
+          ],
+        )
+      : const Padding(
+          padding: EdgeInsets.all(10),
+          child: Text("Question data not found"),
+        );
+}
+
 Widget questionAndOptionAndSolution(questionsList) {
-  final ManageShowingContent manageShowingContent =
-      Get.put(ManageShowingContent());
-  return Expanded(
-    child: SingleChildScrollView(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 1.0),
-            child: InteractiveViewer(
-              maxScale: 4.0,
-              child: Column(
-                children: [
-                  paddingOnly(
-                    4.0,
-                    8.0,
-                    4.0,
-                    8.0,
-                    GestureDetector(
-                      onDoubleTap: () async {
-                        EasyLoading.show(dismissOnTap: true);
-                        var editingAccess = await checkEditorAccessAPI();
-                        if (editingAccess) {
-                          modalForChooseLanguageForEditing();
-                        }
-                      },
-                      child: Column(
+  return questionsList[manageShowingContent.questionListVisibleIndex.value][
+              manageShowingContent.language.value == "hin"
+                  ? "question_hin"
+                  : "question_eng"] !=
+          null
+      ? Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                paddingOnly(
+                  4.0,
+                  8.0,
+                  4.0,
+                  8.0,
+                  GestureDetector(
+                    onDoubleTap: () async {
+                      EasyLoading.show(dismissOnTap: true);
+                      var editingAccess = await checkEditorAccessAPI();
+                      if (editingAccess) {
+                        modalForChooseLanguageForEditing();
+                      }
+                    },
+                    child: Obx(
+                      () => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Obx(
-                            () => Column(
-                              children: [
-                                questionWidget(questionsList[
-                                        manageShowingContent
-                                            .questionListVisibleIndex.value][
-                                    manageShowingContent.language.value == "hin"
-                                        ? "question_hin"
-                                        : "question_eng"]),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    previousOfWidget(questionsList[
-                                            manageShowingContent
-                                                .questionListVisibleIndex
-                                                .value]['previous_of'] ??
-                                        ""),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
+                          questionWidget(questionsList[manageShowingContent
+                                  .questionListVisibleIndex.value][
+                              manageShowingContent.language.value == "hin"
+                                  ? "question_hin"
+                                  : "question_eng"]),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              previousOfWidget(questionsList[
+                                      manageShowingContent
+                                          .questionListVisibleIndex
+                                          .value]['previous_of'] ??
+                                  ""),
+                               Text( questionsList[
+                               manageShowingContent
+                                   .questionListVisibleIndex
+                                   .value]["record_id"]),
+                              InkWell(
+                                  onTap: () {
+                                    Clipboard.setData(ClipboardData(
+                                            text: questionsList[
+                                                manageShowingContent
+                                                    .questionListVisibleIndex
+                                                    .value]["record_id"]))
+                                        .then((_) {
+                                      EasyLoading.showToast(
+                                          "Question's id copied");
+                                    });
+                                  },
+                                  child: Icon(Icons.copy))
+                            ],
+                          )
                         ],
                       ),
                     ),
                   ),
+                ),
+                paddingOnly(
+                  26.0,
+                  10.0,
+                  2.0,
+                  10.0,
                   Column(
                     children: [
-                      paddingOnly(
-                        26.0,
-                        10.0,
-                        2.0,
-                        10.0,
-                        Column(
-                          children: [
-                            Obx(() => (optionBox(
-                                "A",
-                                questionsList[manageShowingContent
-                                        .questionListVisibleIndex.value][
-                                    manageShowingContent.language.value == "hin"
-                                        ? "option1_hin"
-                                        : "option1_eng"],
-                                questionsList[manageShowingContent
-                                    .questionListVisibleIndex
-                                    .value]['answer']))),
-                            Obx(() => (optionBox(
-                                "B",
-                                questionsList[manageShowingContent
-                                        .questionListVisibleIndex.value][
-                                    manageShowingContent.language.value == "hin"
-                                        ? "option2_hin"
-                                        : "option2_eng"],
-                                questionsList[manageShowingContent
-                                    .questionListVisibleIndex
-                                    .value]['answer']))),
-                            Obx(() => (optionBox(
-                                "C",
-                                questionsList[manageShowingContent
-                                        .questionListVisibleIndex.value][
-                                    manageShowingContent.language.value == "hin"
-                                        ? "option3_hin"
-                                        : "option3_eng"],
-                                questionsList[manageShowingContent
-                                    .questionListVisibleIndex
-                                    .value]['answer']))),
-                            Obx(() => (optionBox(
-                                "D",
-                                questionsList[manageShowingContent
-                                        .questionListVisibleIndex.value][
-                                    manageShowingContent.language.value == "hin"
-                                        ? "option4_hin"
-                                        : "option4_eng"],
-                                questionsList[manageShowingContent
-                                    .questionListVisibleIndex
-                                    .value]['answer']))),
+                      Obx(() => (optionBox(
+                          "A",
+                          questionsList[manageShowingContent
+                                  .questionListVisibleIndex.value][
+                              manageShowingContent.language.value == "hin"
+                                  ? "option1_hin"
+                                  : "option1_eng"],
+                          questionsList[manageShowingContent
+                              .questionListVisibleIndex.value]['answer']))),
+                      Obx(() => (optionBox(
+                          "B",
+                          questionsList[manageShowingContent
+                                  .questionListVisibleIndex.value][
+                              manageShowingContent.language.value == "hin"
+                                  ? "option2_hin"
+                                  : "option2_eng"],
+                          questionsList[manageShowingContent
+                              .questionListVisibleIndex.value]['answer']))),
+                      Obx(() => (optionBox(
+                          "C",
+                          questionsList[manageShowingContent
+                                  .questionListVisibleIndex.value][
+                              manageShowingContent.language.value == "hin"
+                                  ? "option3_hin"
+                                  : "option3_eng"],
+                          questionsList[manageShowingContent
+                              .questionListVisibleIndex.value]['answer']))),
+                      Obx(() => (optionBox(
+                          "D",
+                          questionsList[manageShowingContent
+                                  .questionListVisibleIndex.value][
+                              manageShowingContent.language.value == "hin"
+                                  ? "option4_hin"
+                                  : "option4_eng"],
+                          questionsList[manageShowingContent
+                              .questionListVisibleIndex.value]['answer']))),
 
-                            // // operation for 5th option
-                            (questionsList[manageShowingContent
-                                        .questionListVisibleIndex
-                                        .value]['option5_hin'] ==
-                                    "")
-                                ? Container()
-                                : optionBox(
-                                    "E",
-                                    questionsList[manageShowingContent
-                                            .questionListVisibleIndex.value][
-                                        manageShowingContent.language.value ==
-                                                "hin"
-                                            ? "option5_hin"
-                                            : "option5_eng"],
-                                    questionsList[manageShowingContent
-                                        .questionListVisibleIndex
-                                        .value]['answer']),
-                          ],
-                        ),
-                      ),
-                      Obx(() => solutionBox(questionsList[manageShowingContent
-                              .questionListVisibleIndex.value][
-                          manageShowingContent.language.value == "hin"
-                              ? "solution_hin"
-                              : "solution_eng"]))
+                      // // operation for 5th option
+                      (questionsList[manageShowingContent
+                                  .questionListVisibleIndex
+                                  .value]['option5_hin'] ==
+                              "")
+                          ? Container()
+                          : optionBox(
+                              "E",
+                              questionsList[manageShowingContent
+                                      .questionListVisibleIndex.value][
+                                  manageShowingContent.language.value == "hin"
+                                      ? "option5_hin"
+                                      : "option5_eng"],
+                              questionsList[manageShowingContent
+                                  .questionListVisibleIndex.value]['answer']),
                     ],
-                  )
-                ],
-              ),
+                  ),
+                ),
+                Obx(() => solutionBox(
+                    questionsList[manageShowingContent.questionListVisibleIndex.value]
+                        [manageShowingContent.language.value == "hin"
+                            ? "solution_hin"
+                            : "solution_eng"],
+                    questionsList[manageShowingContent.questionListVisibleIndex.value]
+                                ["good_count"] !=
+                            null
+                        ? questionsList[manageShowingContent.questionListVisibleIndex.value]
+                            ["good_count"]
+                        : '0',
+                    questionsList[manageShowingContent.questionListVisibleIndex.value]
+                                ["bad_count"] !=
+                            null
+                        ? questionsList[manageShowingContent.questionListVisibleIndex.value]
+                            ["bad_count"]
+                        : '0'))
+              ],
             ),
           ),
-        ],
-      ),
-    ),
-  );
+        )
+      : const Padding(
+          padding: EdgeInsets.all(10),
+          child: Text("Question data not found"),
+        );
 }
 
 modalForChooseLanguageForEditing() {
   Get.to(const TextEditor());
 }
 
-Widget topbar1(context, icon, setName, screenName) {
+Widget topbar1(context, icon, setName, screenName, isSaveShow) {
   final ManageShowingContent manageShowingContent =
       Get.put(ManageShowingContent());
   return SingleChildScrollView(
@@ -187,6 +369,14 @@ Widget topbar1(context, icon, setName, screenName) {
       children: [
         Row(
           children: [
+            InkWell(
+                onTap: () {
+                  Get.back();
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(Icons.arrow_back_outlined),
+                )),
             paddingOnly(
                 0.0,
                 0.0,
@@ -200,38 +390,40 @@ Widget topbar1(context, icon, setName, screenName) {
                   ),
                 )),
             appBarNew(setName, 14, 10, 10, 10, 10),
-            GestureDetector(
-              onTap: () async {
-                saveSelectedQuestionsAPI();
-              },
-              child: containerPro(
-                paddingOnly(
-                    2.0,
-                    4.0,
-                    2.0,
-                    4.0,
-                    Obx(() => Text(
-                          "Save: ${manageShowingContent.selectedQuestions.length}",
-                          style: TextStyle(
-                            fontSize: 10.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blueGrey.shade900,
-                            fontFamily: "serif",
-                          ),
-                        ))),
-                Colors.white,
-                Colors.transparent,
-                2.0,
-                2.0,
-              ),
-            ),
-            (screenName == "question_selection_screen")
-                ? selectAllQuestionWidget()
-                : Container(),
           ],
         ),
         Row(
           children: [
+            !isSaveShow
+                ? GestureDetector(
+                    onTap: () async {
+                      saveSelectedQuestionsAPI();
+                    },
+                    child: containerPro(
+                      paddingOnly(
+                          2.0,
+                          4.0,
+                          2.0,
+                          4.0,
+                          Obx(() => Text(
+                                "Save: ${manageShowingContent.selectedQuestions.length}",
+                                style: TextStyle(
+                                  fontSize: 10.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blueGrey.shade900,
+                                  fontFamily: "serif",
+                                ),
+                              ))),
+                      Colors.white,
+                      Colors.transparent,
+                      2.0,
+                      2.0,
+                    ),
+                  )
+                : Container(),
+            (screenName == "question_selection_screen")
+                ? selectAllQuestionWidget()
+                : Container(),
             GestureDetector(
               onTap: () {
                 shuffleQuestion(screenName);
@@ -273,47 +465,61 @@ Widget topbar1(context, icon, setName, screenName) {
   );
 }
 
+typedef IntCallback = Function(int num);
+
+final ItemScrollController itemScrollController1 = ItemScrollController();
+final ItemPositionsListener itemPositionsListener1 =
+    ItemPositionsListener.create();
+
+void scrollToXIndex1(index) {
+  itemScrollController1.scrollTo(
+      index: index,
+      duration: const Duration(seconds: 1),
+      curve: Curves.easeInOutCubic);
+}
+
 Widget questionPallete(totalQuestions, scrollToXIndex) {
   final ManageShowingContent manageShowingContentController =
       Get.put(ManageShowingContent());
-  return SingleChildScrollView(
-    scrollDirection: Axis.horizontal,
-    child: Row(
-      children: [
-        for (int i = 0; i < totalQuestions; i++)
-          GestureDetector(
-            onTap: () {
-              manageShowingContentController.questionListVisibleIndex.value = i;
-
-              try {
-                scrollToXIndex(i);
-              } catch (e) {
-                print(e);
-              }
-            },
-            child: paddingOnly(
-              2.0,
-              2.0,
-              2.0,
-              2.0,
-              circularBox(
-                  30.0,
-                  30.0,
-                  (i + 1).toString(),
-                  (manageShowingContentController
-                              .questionListVisibleIndex.value ==
-                          i)
-                      ? Colors.amber
-                      : Colors.amber.shade100,
-                  Colors.black),
-            ),
-          )
-      ],
+  return SizedBox(
+    height: 50,
+    child: ScrollablePositionedList.builder(
+      itemCount: manageShowingContent.questionListForSelection.length,
+      scrollDirection: Axis.horizontal,
+      itemBuilder: (context, index) => GestureDetector(
+        onTap: () {
+          manageShowingContentController.questionListVisibleIndex.value = index;
+          // changePosition(i);
+          try {
+            scrollToXIndex(index);
+          } catch (e) {
+            print(e);
+          }
+        },
+        child: paddingOnly(
+          2.0,
+          2.0,
+          2.0,
+          2.0,
+          Obx(() => circularBox(
+              40.0,
+              40.0,
+              (index + 1).toString(),
+              (manageShowingContentController.questionListVisibleIndex.value ==
+                      index)
+                  ? Colors.amber
+                  : Colors.amber.shade100,
+              Colors.black)),
+        ),
+      ),
+      itemScrollController: itemScrollController1,
+      itemPositionsListener: itemPositionsListener1,
     ),
   );
 }
 
-Widget topbar2(bool showChangeIndex, scrollToXIndex) {
+Widget topbar2(
+    bool showChangeIndex, scrollToXIndex, IntCallback changePosition) {
   final ManageShowingContent manageShowingContent =
       Get.put(ManageShowingContent());
   return Row(
@@ -335,9 +541,12 @@ Widget topbar2(bool showChangeIndex, scrollToXIndex) {
                   4.0,
                   GestureDetector(
                     onTap: () {
-                      showJumpingPositions(manageShowingContent
-                              .questionListForSelection[
-                          manageShowingContent.questionListVisibleIndex.value]);
+                      showJumpingPositions(
+                          manageShowingContent.questionListForSelection[
+                              manageShowingContent
+                                  .questionListVisibleIndex.value], (position) {
+                        changePosition(position);
+                      });
                     },
                     child: const Text(
                       "Change Index",
@@ -393,7 +602,13 @@ Widget questionWidget(text) {
     return Container();
   }
   htmlForRender = htmlForRender.replaceAll(r"\′", r"'");
-  return Container(child: getMathJxOrHtmlWidget(htmlForRender));
+  //website code
+  return Container(
+      constraints: const BoxConstraints(
+        minHeight: 100.0,
+      ),
+      child: getMathJxOrHtmlWidget(htmlForRender));
+  // return getMathJxOrHtmlWidget(htmlForRender);
 }
 
 Widget buttonWidgets(text, icon, function) {
@@ -417,7 +632,9 @@ Widget buttonWidgets(text, icon, function) {
           EasyLoading.dismiss();
           settingPanel();
         } else if (function == "copy_set") {
-          copySet();
+          // copySet()
+          //website code
+          copySetWebSet();
         } else if (function == "thumbnail") {
           EasyLoading.showInfo("Feature is in developement");
         }
@@ -431,6 +648,54 @@ Widget buttonWidgets(text, icon, function) {
         icon,
         color: Colors.black,
       ),
+    ),
+  );
+}
+
+Widget queLeaveWidgets(text, String function) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0),
+    child: GFButton(
+      shape: GFButtonShape.pills,
+      color: Colors.white,
+      onPressed: () async {
+        if (function.toLowerCase() == "low") {
+          manageShowingContent.questionListVisibleIndex.value = 0;
+
+          List filteredData = manageShowingContent
+              .questionListForSelectionBackup
+              .where((question) => question["type"].contains("low"))
+              .toList();
+          manageShowingContent.questionListForSelection.value = filteredData;
+        } else if (function.toLowerCase() == "high") {
+          manageShowingContent.questionListVisibleIndex.value = 0;
+
+          List filteredData = manageShowingContent
+              .questionListForSelectionBackup
+              .where((question) => question["type"].contains("high"))
+              .toList();
+          manageShowingContent.questionListForSelection.value = filteredData;
+        } else if (function.toLowerCase() == "medium") {
+          manageShowingContent.questionListVisibleIndex.value = 0;
+
+          List filteredData = manageShowingContent
+              .questionListForSelectionBackup
+              .where((question) => question["type"].contains("medium"))
+              .toList();
+          manageShowingContent.questionListForSelection.value = filteredData;
+        } else if (function.toLowerCase() == "all") {
+          manageShowingContent.questionListVisibleIndex.value = 0;
+          manageShowingContent.questionListForSelection.value =
+              manageShowingContent.questionListForSelectionBackup;
+        }
+        EasyLoading.showToast(
+            "${manageShowingContent.questionListForSelection.length} saved questions found");
+      },
+      text: text,
+      textStyle: const TextStyle(
+          fontFamily: "serif",
+          color: Colors.black,
+          fontWeight: FontWeight.bold),
     ),
   );
 }
@@ -512,7 +777,7 @@ Widget bottomAction() {
         children: [
           GestureDetector(
             onTap: () {
-              previousQuestion();
+              previousQuestion(scrollToXIndex1);
             },
             child: paddingOnly(
                 4.0,
@@ -531,7 +796,7 @@ Widget bottomAction() {
       ),
       GestureDetector(
         onTap: () {
-          nextQuestion();
+          nextQuestion(scrollToXIndex1);
         },
         child: paddingOnly(
             4.0,

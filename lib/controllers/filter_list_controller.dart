@@ -13,6 +13,16 @@ class FilterListController extends GetxController {
       "selected_item": [].obs,
       "possible_item": [].obs,
     },
+    "City": {
+      "visibility": true.obs,
+      "selected_item": [].obs,
+      "possible_item": [].obs,
+    },
+    "Batch": {
+      "visibility": true.obs,
+      "selected_item": [].obs,
+      "possible_item": [].obs,
+    },
     "Board": {
       "visibility": false.obs,
       "selected_item": [].obs,
@@ -75,6 +85,8 @@ class FilterListController extends GetxController {
       ],
     },
     "onlyPreviousYear": 1.obs,
-    "lastColumnHitForGettingDiscussion": "".obs
+    "language": 1.obs,
+    "lastColumnHitForGettingDiscussion": "".obs,
+    "selectedCity":"Jodhpur".obs
   }.obs;
 }

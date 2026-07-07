@@ -23,4 +23,11 @@ class EditorController extends GetxController {
     "option5_eng",
     "answer"
   ];
+
+  List columnNameShow = [
+    "subject",
+    "chapter",
+    "type",
+    "previous_of",
+  ];
 }

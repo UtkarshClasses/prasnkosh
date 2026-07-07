@@ -4,7 +4,7 @@ Widget textfiledWidget(controller, icon, iconColor, keyboardtype, hintText) {
   return TextField(
     style: const TextStyle(
       fontSize: 16.0,
-      color: Colors.grey,
+      color: Colors.black,
       fontFamily: "serif",
       fontWeight: FontWeight.bold,
     ),

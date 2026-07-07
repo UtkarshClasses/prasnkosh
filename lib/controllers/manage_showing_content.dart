@@ -4,7 +4,10 @@ class ManageShowingContent extends GetxController {
   RxString language = "hin"
       .obs; // ye variable control karega ... kis language me question view karna hai
   RxInt questionListVisibleIndex = 0
-      .obs; // ye variable control karega ... kaun sa question abhi render ho raha hai
+      .obs;
+  RxInt setChangeValue = 0
+      .obs;
+  // ye variable control karega ... kaun sa question abhi render ho raha hai
   RxList questionListForSelection = []
       .obs; // ye variable responsible hai ... kaun sa questions selection ke liye available hai
   List questionListForSelectionBackup = [];

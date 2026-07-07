@@ -5,7 +5,9 @@ import 'package:teach_advance/controllers/manage_showing_content.dart';
 import 'package:teach_advance/utility/PaddingWidget.dart';
 import 'package:teach_advance/utility/circularBox.dart';
 
-showJumpingPositions(thisQuestion) {
+typedef IntCallback = Function(int num);
+
+showJumpingPositions(thisQuestion, IntCallback changePosition) {
   final ManageShowingContent manageShowingContent =
       Get.put(ManageShowingContent());
   Get.defaultDialog(
@@ -29,6 +31,7 @@ showJumpingPositions(thisQuestion) {
                   manageShowingContent.questionListVisibleIndex.value = i;
                   manageShowingContent.selectedQuestions.value =
                       manageShowingContent.questionListForSelection;
+                  changePosition(i);
                   Get.back();
                   EasyLoading.showToast("Question index changed",
                       maskType: EasyLoadingMaskType.black,

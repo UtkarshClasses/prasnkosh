@@ -12,7 +12,7 @@ getSuggestionsAPI(columnName) async {
   var filterListController = Get.put(FilterListController());
 
   if (filterListController
-      .filtersMap['lastColumnHitForGettingDiscussion'].value ==
+          .filtersMap['lastColumnHitForGettingDiscussion'].value ==
       columnName) {
     var keyName = getKeyNameByColumnName(columnName);
     return filterListController.filtersMap[keyName]['possible_item'].value;
@@ -22,19 +22,42 @@ getSuggestionsAPI(columnName) async {
       columnName;
   var payload = {};
   var requiredList = [];
-  for (var element in filterListController.filtersMap['addFilterModalData']
-  ['possible_item']) {
-    if (filterListController.filtersMap[element]['visibility'].value &&
-        filterListController.filtersMap[element]['selected_item'].length > 0) {
 
-      for (var data in filterListController
-          .filtersMap[element]['selected_item']) {
-        requiredList.add(data.id);
+  if (columnName == "subject") {
+    for (var element in filterListController.filtersMap["Exam"]
+        ['selected_item']) {
+      requiredList.add(element.id);
+    }
+  }else if (columnName == "subject") {
+    for (var element in filterListController.filtersMap["Exam"]
+    ['selected_item']) {
+      requiredList.add(element.id);
+    }
+  } else if (columnName == "chapter") {
+    for (var element in filterListController.filtersMap["Subject"]
+        ['selected_item']) {
+      requiredList.add(element.id);
+    }
+  } else if (columnName == "topic") {
+    for (var element in filterListController.filtersMap["Chapter"]
+        ['selected_item']) {
+      requiredList.add(element.id);
+    }
+  } else {
+    for (var element in filterListController.filtersMap['addFilterModalData']
+        ['possible_item']) {
+      if (filterListController.filtersMap[element]['visibility'].value &&
+          filterListController.filtersMap[element]['selected_item'].length >
+              0) {
+        for (var data in filterListController.filtersMap[element]
+            ['selected_item']) {
+          requiredList.add(data.id);
+        }
+        payload[element] = requiredList;
       }
-      payload[element] =
-          requiredList;
     }
   }
+
   // payload.remove(getKeyNameByColumnName(columnName));
   var url = Uri.parse('${globalvariable.nodeBaseURL}getFilter');
   var response = await http.post(
@@ -42,7 +65,7 @@ getSuggestionsAPI(columnName) async {
     body: {
       'token': token,
       'columnName': columnName,
-      'payload':requiredList.join(",")
+      'payload': requiredList.join(",")
     },
   );
   var temp = FilterData.fromJson(jsonDecode(response.body));
@@ -60,6 +83,10 @@ getKeyNameByColumnName(columnName) {
   switch (columnName) {
     case "category":
       return "Category";
+    case "batch":
+      return "Batch";
+    case "city":
+      return "City";
     case "board":
       return "Board";
     case "subject":

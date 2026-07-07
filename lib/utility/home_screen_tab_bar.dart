@@ -1,25 +1,47 @@
+
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gradient_container/gradient_container.dart';
 import 'package:teach_advance/apis/getMySetsAPI.dart';
+
 import '../controllers/home_screen_controller.dart';
-import 'package:teach_advance/utility/colors.dart' as colors;
 import 'home_screen_serach_bar.dart';
 import 'myset_list.dart';
+import 'open_set_action_button.dart';
 
-Widget homeScreenTabBar() {
+Widget homeScreenTabBar(BuildContext context) {
   final HomeScreenController homeScreenController =
       Get.put(HomeScreenController());
   getMySetsAPI();
   return Obx(() => (homeScreenController.setFolderList.isEmpty)
-      ? Center(
-        child: CircularProgressIndicator(
-          color: colors.leftGradient,
-        ),
-      )
+      ? Container(
+          child: const Center(
+            child: Column(
+              children: [
+                Image(image: AssetImage("assets/images/home_img.png")),
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    "Look Like you have not made any set yet,\n Click on below New Set button",
+                    style: TextStyle(
+                        fontFamily: "Poppins",
+                        fontSize: 16,
+                        color: Colors.black),
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              ],
+            ),
+          ),
+        )
       : Column(
           children: [
-            homeScreenSearchBar(homeScreenController.mySetsBackup),
+
+            homeScreenSearchBar(homeScreenController.mySetsBackup,context),
             Expanded(
               child: Container(
                   padding: const EdgeInsets.symmetric(

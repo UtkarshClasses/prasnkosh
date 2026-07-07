@@ -12,12 +12,12 @@ class HomeScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: appBar(["PrashnKOSH"]),
+          appBar: appBar(["prasnKOSH"]),
           body: Column(
             children: [
               // appBarNew("Teach", 24.0, 10.0, 10.0),
               // chipInList(Colors.red, Colors.blue, "Alpha"),
-              Expanded(child: homeScreenTabBar()),
+              Expanded(child: homeScreenTabBar(context)),
             ],
           ),
           floatingActionButton: newSetFloatingActionButton(),

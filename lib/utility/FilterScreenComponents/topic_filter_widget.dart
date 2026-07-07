@@ -74,7 +74,7 @@ void openFilterDialog(context) async {
     listData:
         filterListController.filtersMap['Topic']['possible_item'].cast<Data>(),
     selectedListData: selectedItem,
-      choiceChipLabel: (item) => item!.title,
+      choiceChipLabel: (item) => "${item!.title}(${item.id})",
     validateSelectedItem: (list, val) => list!.contains(val),
     onApplyButtonClick: (list) {
       filterListController.filtersMap["Topic"]["selected_item"].value = list;
@@ -91,6 +91,7 @@ void openFilterDialog(context) async {
         choiceChipTheme: ChoiceChipThemeData(
             selectedBackgroundColor: colors.leftGradient,
             labelPadding: const EdgeInsets.all(6),
+            margin:const EdgeInsets.all(5),
             selectedTextStyle: const TextStyle(
                 fontFamily: "Poppins", fontWeight: FontWeight.w600),
             textStyle: const TextStyle(

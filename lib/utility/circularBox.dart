@@ -16,7 +16,7 @@ Widget circularBox(height, width, text, backGroundColor, fontColor) {
           text,
           style: TextStyle(
               fontFamily: "serif",
-              fontSize: 11,
+              fontSize: 13,
               fontWeight: FontWeight.bold,
               color: fontColor),
         ),

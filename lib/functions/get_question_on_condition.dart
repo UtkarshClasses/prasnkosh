@@ -11,7 +11,7 @@ import '../controllers/manage_showing_content.dart';
 import '../screens/question_selection_screen.dart';
 import 'package:teach_advance/utility/colors.dart' as colors;
 
-getQuestionOnCondition() async {
+getQuestionOnCondition(langeCode) async {
   EasyLoading.show(
       indicator: Card(
           shadowColor: Colors.blueGrey.shade100,
@@ -31,17 +31,43 @@ getQuestionOnCondition() async {
   var filterListController = Get.put(FilterListController());
   var payload = {};
   var requiredList = [];
-  for (var element in filterListController.filtersMap['addFilterModalData']
-      ['possible_item']) {
-    if (filterListController.filtersMap[element]['visibility'].value &&
-        filterListController.filtersMap[element]['selected_item'].length > 0) {
-      for (var data in filterListController
-          .filtersMap[element]['selected_item']) {
-        requiredList.add(data.id);
-      }
-      payload[element] =
-          requiredList;
-    }
+  var examList = [];
+  var subjectList = [];
+  var chapterList = [];
+  var topicList = [];
+  var batchList = [];
+  // for (var element in filterListController.filtersMap['addFilterModalData']
+  //     ['possible_item']) {
+  //   if (filterListController.filtersMap[element]['visibility'].value &&
+  //       filterListController.filtersMap[element]['selected_item'].length > 0) {
+  //     for (var data in filterListController
+  //         .filtersMap[element]['selected_item']) {
+  //       requiredList.add(data.id);
+  //     }
+  //     payload[element] =
+  //         requiredList;
+  //   }
+  // }
+
+  for (var element in filterListController.filtersMap["Exam"]
+      ['selected_item']) {
+    examList.add(element.id);
+  }
+  for (var element in filterListController.filtersMap["Subject"]
+      ['selected_item']) {
+    subjectList.add(element.id);
+  }
+  for (var element in filterListController.filtersMap["Chapter"]
+      ['selected_item']) {
+    chapterList.add(element.id);
+  }
+  for (var element in filterListController.filtersMap["Topic"]
+      ['selected_item']) {
+    requiredList.add(element.id);
+  }
+  for (var element in filterListController.filtersMap["Batch"]
+      ['selected_item']) {
+    batchList.add(element.batId);
   }
   final userDetails = GetStorage();
   var token = userDetails.read('token');
@@ -51,6 +77,11 @@ getQuestionOnCondition() async {
     body: {
       'token': token,
       'payload': requiredList.join(","),
+      'exam_payload': examList.join(","),
+      'subject_payload': subjectList.join(","),
+      'chapter_payload': chapterList.join(","),
+      'batch_payload': batchList.join(","),
+      'lang_code':langeCode.toString(),
       'onlyPreviousYear':
           (filterListController.filtersMap['onlyPreviousYear'].value == 1)
               ? true.toString()

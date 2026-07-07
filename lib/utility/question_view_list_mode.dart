@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -8,8 +9,10 @@ import 'package:teach_advance/utility/containerPro.dart';
 import 'package:teach_advance/utility/previous_of_widget.dart';
 import 'package:teach_advance/utility/widget_of_question_show_screen.dart';
 
+import '../apis/checkEditorAccessPermissionAPI.dart';
 import '../functions/check_questions_available_in_list.dart';
 import '../functions/getRecordIdOfSelectedQuestionInAPraticularSet.dart';
+import '../screens/editor.dart';
 
 Widget listMode(itemScrollController, itemPositionsListener) {
   final ManageShowingContent manageShowingContent =
@@ -46,7 +49,8 @@ Widget listMode(itemScrollController, itemPositionsListener) {
                                       onChanged: (value) {
                                         questionSelectCheckBoxClickedOne(index);
                                       },
-                                      value: questionSelectoNECheckBoxClicked(index),
+                                      value: questionSelectoNECheckBoxClicked(
+                                          index),
                                     ),
                                     containerPro(
                                         Padding(
@@ -61,7 +65,26 @@ Widget listMode(itemScrollController, itemPositionsListener) {
                                         Colors.yellow,
                                         Colors.transparent,
                                         4.0,
-                                        4.0)
+                                        4.0),
+                                    InkWell(
+                                      onTap: () async {
+                                        EasyLoading.show(dismissOnTap: true);
+                                        var editingAccess =
+                                            await checkEditorAccessAPI();
+                                        if (editingAccess) {
+                                          showModalBottomSheet(
+                                            context: context,
+                                            isScrollControlled: true,
+                                            builder: (context) =>const TextEditor(),
+                                          );
+                                          // modalForChooseLanguageForEditing();
+                                        }
+                                      },
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Icon(Icons.edit),
+                                      ),
+                                    )
                                   ],
                                 ),
                                 questionWidget(manageShowingContent

@@ -12,7 +12,7 @@ homeScreenAddQuestionButtonClick(setName, setId, setPassword) async {
   getMySetQuestionsAPI(setId, setPassword);
   await assignSetIdSetPasswordSetNameOfClickedSet(setName, setId, setPassword);
   EasyLoading.dismiss();
-  Get.to(() => const FilterScreen(),
+  Get.to(() =>  FilterScreen(),
       duration: const Duration(milliseconds: 500),
       transition: Transition.rightToLeft);
 }

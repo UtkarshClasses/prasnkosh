@@ -25,7 +25,6 @@ class Authentication extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
           child: Center(
             child: Container(
-              height: height * 0.4,
               decoration: BoxDecoration(boxShadow: const [
                 BoxShadow(
                   color: Colors.grey,
