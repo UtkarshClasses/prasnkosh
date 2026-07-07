@@ -3,11 +3,12 @@
 
 class FilterData {
   FilterData({
-      num? status, 
-      List<Data>? data,}){
+    num? status,
+    List<Data>? data,
+  }) {
     _status = status;
     _data = data;
-}
+  }
 
   FilterData.fromJson(dynamic json) {
     _status = json['status'];
@@ -20,11 +21,14 @@ class FilterData {
   }
   num? _status;
   List<Data>? _data;
-FilterData copyWith({  num? status,
-  List<Data>? data,
-}) => FilterData(  status: status ?? _status,
-  data: data ?? _data,
-);
+  FilterData copyWith({
+    num? status,
+    List<Data>? data,
+  }) =>
+      FilterData(
+        status: status ?? _status,
+        data: data ?? _data,
+      );
   num? get status => _status;
   List<Data>? get data => _data;
 
@@ -36,7 +40,6 @@ FilterData copyWith({  num? status,
     }
     return map;
   }
-
 }
 
 /// id : "3"
@@ -45,13 +48,14 @@ FilterData copyWith({  num? status,
 
 class Data {
   Data({
-      String? id, 
-      String? title, 
-      String? coverImage,}){
+    String? id,
+    String? title,
+    String? coverImage,
+  }) {
     _id = id;
     _title = title;
     _coverImage = coverImage;
-}
+  }
 
   Data.fromJson(dynamic json) {
     _id = json['id'];
@@ -61,13 +65,16 @@ class Data {
   String? _id;
   String? _title;
   String? _coverImage;
-Data copyWith({  String? id,
-  String? title,
-  String? coverImage,
-}) => Data(  id: id ?? _id,
-  title: title ?? _title,
-  coverImage: coverImage ?? _coverImage,
-);
+  Data copyWith({
+    String? id,
+    String? title,
+    String? coverImage,
+  }) =>
+      Data(
+        id: id ?? _id,
+        title: title ?? _title,
+        coverImage: coverImage ?? _coverImage,
+      );
   String? get id => _id;
   String? get title => _title;
   String? get coverImage => _coverImage;
@@ -80,4 +87,11 @@ Data copyWith({  String? id,
     return map;
   }
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Data && runtimeType == other.runtimeType && _id == other._id;
+
+  @override
+  int get hashCode => _id.hashCode;
 }

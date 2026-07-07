@@ -24,7 +24,6 @@ class BatchData {
         data: data ?? _data,
       );
 
-
   List<Batch>? get data => _data;
 
   Map<String, dynamic> toJson() {
@@ -115,4 +114,14 @@ class Batch {
     map['batch_location'] = _batchLocation;
     return map;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Batch &&
+          runtimeType == other.runtimeType &&
+          _batId == other._batId;
+
+  @override
+  int get hashCode => _batId.hashCode;
 }

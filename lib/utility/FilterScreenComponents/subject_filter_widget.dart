@@ -76,7 +76,7 @@ void openFilterDialog(context) async {
         .cast<Data>(),
     selectedListData: selectedItem,
     choiceChipLabel: (item) => "${item!.title}(${item.id})",
-    validateSelectedItem: (list, val) => list!.contains(val),
+    validateSelectedItem: (list, val) => list!.any((e) => e.id == val.id),
     onApplyButtonClick: (list) {
       filterListController.filtersMap["Subject"]["selected_item"].value = list;
       Get.back();

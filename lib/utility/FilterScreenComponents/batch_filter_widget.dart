@@ -202,7 +202,7 @@ void openFilterDialog(context, List<Batch> data) async {
     listData: data,
     selectedListData: selectedItem,
     choiceChipLabel: (item) => "${item?.batchName}(${item!.batId})",
-    validateSelectedItem: (list, val) => list!.contains(val),
+    validateSelectedItem: (list, val) => list!.any((e) => e.batId == val.batId),
     onApplyButtonClick: (list) {
       filterListController.filtersMap["Batch"]["selected_item"].value = list;
       Get.back();
