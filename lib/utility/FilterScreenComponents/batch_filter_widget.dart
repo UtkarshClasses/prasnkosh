@@ -103,9 +103,10 @@ Widget batchFilterWidget(context) {
         Card(
       color: Colors.white,
       elevation: 10.0,
-      child: SizedBox(
-        height: 90,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 90),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             GestureDetector(
               onTap: () async {

@@ -35,8 +35,11 @@ class FilterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var filterListController = Get.put(FilterListController());
-    if (filterListController.filtersMap["City"]["selected_item"].value.isEmpty) {
-      filterListController.filtersMap["City"]["selected_item"].value = [data12[0]];
+    if (filterListController
+        .filtersMap["City"]["selected_item"].value.isEmpty) {
+      filterListController.filtersMap["City"]["selected_item"].value = [
+        data12[0]
+      ];
     }
     return SafeArea(
       child: Scaffold(

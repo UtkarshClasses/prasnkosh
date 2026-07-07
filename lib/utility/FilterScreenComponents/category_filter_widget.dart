@@ -15,9 +15,10 @@ Widget categoryFilterWidget(context) {
     child: Card(
       color: Colors.white,
       elevation: 10.0,
-      child: SizedBox(
-        height: 90,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 90),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               decoration: BoxDecoration(color: colors.leftGradientLight),
@@ -64,14 +65,15 @@ Widget categoryFilterWidget(context) {
 
 void openFilterDialog(context) async {
   var filterListController = Get.put(FilterListController());
-  List<String> selectedItem =
-      filterListController.filtersMap['Category']['selected_item'].cast<String>();
+  List<String> selectedItem = filterListController.filtersMap['Category']
+          ['selected_item']
+      .cast<String>();
   await FilterListDialog.display(
     context,
     height: 500,
     backgroundColor: Colors.yellow,
-    listData:
-        filterListController.filtersMap['Category']['possible_item'].cast<String>(),
+    listData: filterListController.filtersMap['Category']['possible_item']
+        .cast<String>(),
     selectedListData: selectedItem,
     choiceChipLabel: (item) => item,
     validateSelectedItem: (list, val) => list!.contains(val),
@@ -90,7 +92,7 @@ void openFilterDialog(context) async {
         choiceChipTheme: ChoiceChipThemeData(
             selectedBackgroundColor: colors.leftGradient,
             labelPadding: const EdgeInsets.all(6),
-            margin:const EdgeInsets.all(5),
+            margin: const EdgeInsets.all(5),
             selectedTextStyle: const TextStyle(
                 fontFamily: "Poppins", fontWeight: FontWeight.w600),
             textStyle: const TextStyle(

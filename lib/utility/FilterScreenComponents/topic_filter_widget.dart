@@ -16,9 +16,10 @@ Widget topicFilterWidget(context) {
     child: Card(
       color: Colors.white,
       elevation: 10.0,
-      child: SizedBox(
-        height: 90,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 90),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               decoration: BoxDecoration(color: colors.leftGradientLight),
@@ -74,7 +75,7 @@ void openFilterDialog(context) async {
     listData:
         filterListController.filtersMap['Topic']['possible_item'].cast<Data>(),
     selectedListData: selectedItem,
-      choiceChipLabel: (item) => "${item!.title}(${item.id})",
+    choiceChipLabel: (item) => "${item!.title}(${item.id})",
     validateSelectedItem: (list, val) => list!.contains(val),
     onApplyButtonClick: (list) {
       filterListController.filtersMap["Topic"]["selected_item"].value = list;
@@ -91,7 +92,7 @@ void openFilterDialog(context) async {
         choiceChipTheme: ChoiceChipThemeData(
             selectedBackgroundColor: colors.leftGradient,
             labelPadding: const EdgeInsets.all(6),
-            margin:const EdgeInsets.all(5),
+            margin: const EdgeInsets.all(5),
             selectedTextStyle: const TextStyle(
                 fontFamily: "Poppins", fontWeight: FontWeight.w600),
             textStyle: const TextStyle(

@@ -15,9 +15,10 @@ Widget cityFilterWidget(context) {
     child: Card(
       color: Colors.white,
       elevation: 10.0,
-      child: SizedBox(
-        height: 90,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 90),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               decoration: BoxDecoration(color: colors.leftGradientLight),
@@ -86,7 +87,7 @@ void openFilterDialog(context) async {
   var filterListController = Get.put(FilterListController());
   List<dynamic> selectedItem =
       filterListController.filtersMap['City']['selected_item'].value;
-  List<String> dataStr= [];
+  List<String> dataStr = [];
   selectedItem.forEach((element) {
     dataStr.add(element.title!);
   });
@@ -101,10 +102,9 @@ void openFilterDialog(context) async {
     choiceChipLabel: (item) => item,
     validateSelectedItem: (list, val) => list!.contains(val),
     onApplyButtonClick: (list) {
-      List<dynamic> data= [];
+      List<dynamic> data = [];
       list?.forEach((element) {
-        Data data1 =
-        Data(id: "0", title: element, coverImage: "");
+        Data data1 = Data(id: "0", title: element, coverImage: "");
         data.add(data1);
       });
       filterListController.filtersMap["City"]["selected_item"].value = data;
@@ -119,10 +119,9 @@ void openFilterDialog(context) async {
               primaryButtonBackgroundColor: colors.leftGradient),
         ),
         choiceChipTheme: ChoiceChipThemeData(
-
             selectedBackgroundColor: colors.leftGradient,
             labelPadding: const EdgeInsets.all(6),
-            margin:const EdgeInsets.all(5),
+            margin: const EdgeInsets.all(5),
             selectedTextStyle: const TextStyle(
                 fontFamily: "Poppins", fontWeight: FontWeight.w600),
             textStyle: const TextStyle(

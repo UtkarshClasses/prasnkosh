@@ -15,9 +15,10 @@ Widget boardFilterWidget(context) {
     child: Card(
       color: Colors.white,
       elevation: 10.0,
-      child: SizedBox(
-        height: 90,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 90),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               decoration: BoxDecoration(color: colors.leftGradientLight),
@@ -70,8 +71,8 @@ void openFilterDialog(context) async {
     context,
     height: 500,
     backgroundColor: Colors.yellow,
-    listData:
-        filterListController.filtersMap['Board']['possible_item'].cast<String>(),
+    listData: filterListController.filtersMap['Board']['possible_item']
+        .cast<String>(),
     selectedListData: selectedItem,
     choiceChipLabel: (item) => item,
     validateSelectedItem: (list, val) => list!.contains(val),
@@ -90,7 +91,7 @@ void openFilterDialog(context) async {
         choiceChipTheme: ChoiceChipThemeData(
             selectedBackgroundColor: colors.leftGradient,
             labelPadding: const EdgeInsets.all(6),
-            margin:const EdgeInsets.all(5),
+            margin: const EdgeInsets.all(5),
             selectedTextStyle: const TextStyle(
                 fontFamily: "Poppins", fontWeight: FontWeight.w600),
             textStyle: const TextStyle(

@@ -16,9 +16,10 @@ Widget subjectFilterWidget(context) {
     child: Card(
       color: Colors.white,
       elevation: 10.0,
-      child: SizedBox(
-        height: 90,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 90),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               decoration: BoxDecoration(color: colors.leftGradientLight),
@@ -65,9 +66,8 @@ Widget subjectFilterWidget(context) {
 
 void openFilterDialog(context) async {
   var filterListController = Get.put(FilterListController());
-  List<Data> selectedItem = filterListController.filtersMap['Subject']
-          ['selected_item']
-      .cast<Data>();
+  List<Data> selectedItem =
+      filterListController.filtersMap['Subject']['selected_item'].cast<Data>();
   await FilterListDialog.display(
     context,
     height: 500,
@@ -92,8 +92,8 @@ void openFilterDialog(context) async {
         choiceChipTheme: ChoiceChipThemeData(
             selectedBackgroundColor: colors.leftGradient,
             labelPadding: const EdgeInsets.all(6),
-            margin:const EdgeInsets.all(5),
-                       selectedTextStyle: const TextStyle(
+            margin: const EdgeInsets.all(5),
+            selectedTextStyle: const TextStyle(
                 fontFamily: "Poppins", fontWeight: FontWeight.w600),
             textStyle: const TextStyle(
                 fontFamily: "Poppins", fontWeight: FontWeight.w600)),
