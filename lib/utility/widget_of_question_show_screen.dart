@@ -395,31 +395,37 @@ Widget topbar1(context, icon, setName, screenName, isSaveShow) {
         Row(
           children: [
             !isSaveShow
-                ? GestureDetector(
-                    onTap: () async {
-                      saveSelectedQuestionsAPI();
-                    },
-                    child: containerPro(
-                      paddingOnly(
-                          2.0,
-                          4.0,
-                          2.0,
-                          4.0,
-                          Obx(() => Text(
-                                "Save: ${manageShowingContent.selectedQuestions.length}",
-                                style: TextStyle(
-                                  fontSize: 10.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blueGrey.shade900,
-                                  fontFamily: "serif",
-                                ),
-                              ))),
-                      Colors.white,
-                      Colors.transparent,
-                      2.0,
-                      2.0,
+                ? MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: () async {
+                        saveSelectedQuestionsAPI();
+                      },
+                      child: containerPro(
+                        paddingOnly(
+                            2.0,
+                            4.0,
+                            2.0,
+                            4.0,
+                            Obx(() => Text(
+                                  "Save: ${manageShowingContent.selectedQuestions.length}",
+                                  style: TextStyle(
+                                    fontSize: 10.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blueGrey.shade900,
+                                    fontFamily: "serif",
+                                  ),
+                                ))),
+                        Colors.white,
+                        Colors.transparent,
+                        2.0,
+                        2.0,
+                      ),
                     ),
                   )
+                : Container(),
+            !isSaveShow
+                ? const SizedBox(width: 10.0)
                 : Container(),
             (screenName == "question_selection_screen")
                 ? selectAllQuestionWidget()
