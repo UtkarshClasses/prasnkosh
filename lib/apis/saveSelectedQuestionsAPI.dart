@@ -26,11 +26,39 @@ saveSelectedQuestionsAPI() async {
   var token = userDetails.read('token');
   var url = Uri.parse('${globalvariable.nodeBaseURL}uploadQuestions');
   var batchNameList = [];
-
+  var examList = [];
+  var examNameList = [];
+  var subjectList = [];
+  var subjectNameList = [];
+  var chapterList = [];
+  var chapterNameList = [];
+  var topicList = [];
+  var topicNameList = [];
   for (var element in filterListController.filtersMap["Batch"]
       ['selected_item']) {
     batchNameList.add(element.batchName);
   }
+  for (var element in filterListController.filtersMap["Exam"]
+      ['selected_item']) {
+    examList.add(element.id);
+    examNameList.add(element.title);
+  }
+  for (var element in filterListController.filtersMap["Subject"]
+      ['selected_item']) {
+    subjectList.add(element.id);
+    subjectNameList.add(element.title);
+  }
+  for (var element in filterListController.filtersMap["Chapter"]
+      ['selected_item']) {
+    chapterList.add(element.id);
+    chapterNameList.add(element.title);
+  }
+  for (var element in filterListController.filtersMap["Topic"]
+      ['selected_item']) {
+    topicList.add(element.id);
+    topicNameList.add(element.title);
+  }
+
   var response = await http.post(
     url,
     body: {
@@ -38,8 +66,16 @@ saveSelectedQuestionsAPI() async {
       'set_id':
           manageShowingContentController.selectedSetForOperation['set_id'],
       'data': data,
-      'batch_id': batchIDS.isEmpty ? "" : batchIDS.join(","),
-      'batch_name': batchNameList.join(",")
+      'batch_id': batchIDS.isEmpty ? "" : batchIDS.join("#-#"),
+      'batch_name': batchNameList.isEmpty ? "" : batchNameList.join("#-#"),
+      'exam_id': examList.isEmpty ? "" : examList.join("#-#"),
+      'subject_id': subjectList.isEmpty ? "" : subjectList.join("#-#"),
+      'chapter_id': chapterList.isEmpty ? "" : chapterList.join("#-#"),
+      'topic_id': topicList.isEmpty ? "" : topicList.join("#-#"),
+      'exam_name': examNameList.isEmpty ? "" : examNameList.join("#-#"),
+      'subject_name': subjectNameList.isEmpty ? "" : subjectNameList.join("#-#"),
+      'chapter_name': chapterNameList.isEmpty ? "" : chapterNameList.join("#-#"),
+      'topic_name': topicNameList.isEmpty ? "" : topicNameList.join("#-#")
     },
   );
   EasyLoading.dismiss();
