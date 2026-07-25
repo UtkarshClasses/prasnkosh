@@ -12,6 +12,7 @@ import 'package:teach_advance/apis/saveSelectedQuestionsAPI.dart';
 import 'package:teach_advance/controllers/home_screen_controller.dart';
 import 'package:teach_advance/controllers/manage_showing_content.dart';
 import 'package:teach_advance/functions/filterButtonClick.dart';
+import 'package:teach_advance/functions/get_question_on_condition.dart';
 import 'package:teach_advance/functions/nextPreviousButtonClickWhileViewingQuestions.dart';
 import 'package:teach_advance/functions/shuffleQuestion.dart';
 import 'package:teach_advance/functions/transfer_set_on_click.dart';
@@ -69,7 +70,7 @@ Widget questionAndOptionAndSolutionWeb(questionsList) {
                               Clipboard.setData(ClipboardData(
                                       text: questionsList[manageShowingContent
                                           .questionListVisibleIndex
-                                          .value]["record_id"]))
+                                          .value]["record_id"].toString()))
                                   .then((_) {
                                 EasyLoading.showToast("Question's id copied");
                               });
@@ -245,14 +246,14 @@ Widget questionAndOptionAndSolution(questionsList) {
                                Text( questionsList[
                                manageShowingContent
                                    .questionListVisibleIndex
-                                   .value]["record_id"]),
+                                   .value]["record_id"].toString()),
                               InkWell(
                                   onTap: () {
                                     Clipboard.setData(ClipboardData(
                                             text: questionsList[
                                                 manageShowingContent
                                                     .questionListVisibleIndex
-                                                    .value]["record_id"]))
+                                                    .value]["record_id"].toString()))
                                         .then((_) {
                                       EasyLoading.showToast(
                                           "Question's id copied");
@@ -464,6 +465,39 @@ Widget topbar1(context, icon, setName, screenName, isSaveShow) {
                 ),
               ),
             ),
+            (screenName == "question_selection_screen")
+                ? Obx(() => manageShowingContent.hasMoreQuestionsToLoad.value
+                    ? GestureDetector(
+                        onTap: () async {
+                          await loadMoreQuestions();
+                        },
+                        child: paddingOnly(
+                          0.0,
+                          16.0,
+                          0.0,
+                          16.0,
+                          containerPro(
+                              paddingOnly(
+                                  6.0,
+                                  10.0,
+                                  6.0,
+                                  10.0,
+                                  const Text(
+                                    "Load More",
+                                    style: TextStyle(
+                                      fontFamily: "serif",
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  )),
+                              Colors.white,
+                              Colors.transparent,
+                              2.0,
+                              2.0),
+                        ),
+                      )
+                    : Container())
+                : Container(),
           ],
         ),
       ],

@@ -53,9 +53,9 @@ class QuestionSelectionScreen extends StatelessWidget {
             ),
           )
         ]),
-      questionPallete(
+      Obx(() => questionPallete(
             manageShowingContent.questionListForSelection.length,
-            scrollToXIndex),
+            scrollToXIndex)),
         Obx(() => (manageShowingContent.questionViewMode.value == 0)
             ? listMode(itemScrollController, itemPositionsListener)
             : questionViewDefaultMode()),
