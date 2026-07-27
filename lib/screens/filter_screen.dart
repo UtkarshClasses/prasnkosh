@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:get/get.dart';
@@ -26,8 +25,7 @@ class FilterScreen extends StatelessWidget {
   FilterScreen({super.key});
 
   int langeCode = 1;
-  final TextEditingController numberOfQuestionController =
-      TextEditingController();
+  static const int numberOfQuestionsLimit = 50;
   final List<Data> data12 = [
     Data(id: "0", title: "Jodhpur", coverImage: ""),
     Data(id: "0", title: "Jaipur", coverImage: ""),
@@ -277,34 +275,6 @@ class FilterScreen extends StatelessWidget {
                         )
                       ],
                     )),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    "Number Of Questions *",
-                    style: TextStyle(
-                        fontFamily: "Poppins", fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: TextField(
-                    controller: numberOfQuestionController,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
-                    style: const TextStyle(
-                      fontFamily: "Poppins",
-                      fontWeight: FontWeight.normal,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: "Enter number of questions",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                ),
                 const SizedBox(height: 8),
                 GFButton(
                   size: GFSize.LARGE,
@@ -320,13 +290,8 @@ class FilterScreen extends StatelessWidget {
                       return;
                     }
 
-                    if (numberOfQuestionController.text.trim().isEmpty) {
-                      EasyLoading.showToast("Please enter number of questions");
-                      return;
-                    }
-
                     await getQuestionOnCondition(
-                        langeCode, numberOfQuestionController.text.trim());
+                        langeCode, numberOfQuestionsLimit.toString());
                   },
                   text: "Get Questions",
                   textStyle: const TextStyle(
