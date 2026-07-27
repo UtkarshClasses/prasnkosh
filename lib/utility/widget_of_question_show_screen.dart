@@ -40,6 +40,12 @@ final ManageShowingContent manageShowingContent =
     Get.put(ManageShowingContent());
 
 Widget questionAndOptionAndSolutionWeb(questionsList) {
+  if (questionsList.isEmpty) {
+    return const Padding(
+      padding: EdgeInsets.all(10),
+      child: Text("Question data not found"),
+    );
+  }
   return questionsList[manageShowingContent.questionListVisibleIndex.value][
               manageShowingContent.language.value == "hin"
                   ? "question_hin"
@@ -204,6 +210,12 @@ Widget questionAndOptionAndSolutionWeb(questionsList) {
 }
 
 Widget questionAndOptionAndSolution(questionsList) {
+  if (questionsList.isEmpty) {
+    return const Padding(
+      padding: EdgeInsets.all(10),
+      child: Text("Question data not found"),
+    );
+  }
   return questionsList[manageShowingContent.questionListVisibleIndex.value][
               manageShowingContent.language.value == "hin"
                   ? "question_hin"
@@ -581,6 +593,10 @@ Widget topbar2(
                   4.0,
                   GestureDetector(
                     onTap: () {
+                      if (manageShowingContent
+                          .questionListForSelection.isEmpty) {
+                        return;
+                      }
                       showJumpingPositions(
                           manageShowingContent.questionListForSelection[
                               manageShowingContent
@@ -614,6 +630,9 @@ Widget topbar2(
             4.0,
             GestureDetector(
               onTap: () {
+                if (manageShowingContent.questionListForSelection.isEmpty) {
+                  return;
+                }
                 reportErrorModal(manageShowingContent.questionListForSelection[
                         manageShowingContent.questionListVisibleIndex.value]
                     ['record_id']);
