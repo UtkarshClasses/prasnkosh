@@ -45,37 +45,50 @@ Widget selectCheckBoxAndTimesUsedAndListButton(scrollToXIndex) {
             child: getIconWidget(Icons.list_alt_outlined, Colors.white, 36.0),
           )),
       Obx(
-        () => GFCheckbox(
-          size: 25,
-          activeBgColor: GFColors.SUCCESS,
-          onChanged: (value) async {
-            questionSelectCheckBoxClicked();
-          },
-          value: checkAvailableInList(
-              getRecordIdOfSelectedQuestionInAPraticularSet(),
-              manageShowingContent.questionListForSelection[manageShowingContent
-                  .questionListVisibleIndex.value]['record_id']),
-        ),
-      ),
-      Obx(
-        () => (manageShowingContent.usedQuestions['record_id_list'].value
-                .contains(manageShowingContent.questionListForSelection[
+        () => manageShowingContent.questionListForSelection.isEmpty
+            ? Container()
+            : GFCheckbox(
+                size: 25,
+                activeBgColor: GFColors.SUCCESS,
+                onChanged: (value) async {
+                  questionSelectCheckBoxClicked();
+                },
+                value: checkAvailableInList(
+                    getRecordIdOfSelectedQuestionInAPraticularSet(),
+                    manageShowingContent.questionListForSelection[
                         manageShowingContent.questionListVisibleIndex.value]
-                    ['record_id']))
-            ? containerPro(
-                Text(
-                  "Used ${manageShowingContent.usedQuestions['record_id_list'].where((e) => e == manageShowingContent.questionListForSelection[manageShowingContent.questionListVisibleIndex.value]['record_id']).length} times",
-                  style: const TextStyle(
-                      fontFamily: "serif",
-                      fontSize: 9.0,
-                      fontStyle: FontStyle.italic),
-                ),
-                Colors.yellow,
-                Colors.white,
-                4.0,
-                10.0)
-            : Container(),
+                        ['record_id']),
+              ),
       ),
+      Obx(() {
+        if (manageShowingContent.questionListForSelection.isEmpty) {
+          return Container();
+        }
+        var thisQuestion = manageShowingContent.questionListForSelection[
+            manageShowingContent.questionListVisibleIndex.value];
+        var isSelected = checkAvailableInList(
+            getRecordIdOfSelectedQuestionInAPraticularSet(),
+            thisQuestion['record_id']);
+        if (!isSelected) {
+          return Container();
+        }
+        var usedCount = thisQuestion['used_count'] ?? 0;
+        if (usedCount == 0) {
+          usedCount = 1;
+        }
+        return containerPro(
+            Text(
+              "Used $usedCount times",
+              style: const TextStyle(
+                  fontFamily: "serif",
+                  fontSize: 9.0,
+                  fontStyle: FontStyle.italic),
+            ),
+            Colors.yellow,
+            Colors.white,
+            4.0,
+            10.0);
+      }),
     ],
   );
 }

@@ -25,7 +25,7 @@ class FilterScreen extends StatelessWidget {
   FilterScreen({super.key});
 
   int langeCode = 1;
-  static const int numberOfQuestionsLimit = 10;
+  static const int numberOfQuestionsLimit = 50;
   final List<Data> data12 = [
     Data(id: "0", title: "Jodhpur", coverImage: ""),
     Data(id: "0", title: "Jaipur", coverImage: ""),

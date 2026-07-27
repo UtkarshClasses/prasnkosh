@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/components/accordion/gf_accordion.dart';
 import 'package:teach_advance/utility/widget_of_question_show_screen.dart';
 
-Widget solutionBox(String text, String goodCount, String badCount) {
+Widget solutionBox(String text, dynamic goodCount, dynamic badCount) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: text.isNotEmpty
