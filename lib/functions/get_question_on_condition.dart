@@ -107,9 +107,11 @@ getQuestionOnCondition(langeCode, numberOfQuestion,
   manageShowingContentController.questionFetchLastId =
       decodedResponse['next_id'];
   manageShowingContentController.questionFetchOffset =
-      int.tryParse(decodedResponse['next_offset']?.toString() ?? '') ?? 0;
+      int.tryParse(decodedResponse['next_offset']?.toString() ?? '') ??
+          (offset + (apiData as List).length);
+  var hasMoreRaw = decodedResponse['has_more'];
   manageShowingContentController.hasMoreQuestionsToLoad.value =
-      decodedResponse['has_more'] == true;
+      hasMoreRaw == true || hasMoreRaw == 1 || hasMoreRaw.toString() == 'true';
 
   if (!loadMore) {
     if (apiData.length == 0) {
