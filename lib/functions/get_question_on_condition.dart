@@ -11,11 +11,9 @@ import '../controllers/manage_showing_content.dart';
 import '../screens/question_selection_screen.dart';
 import 'package:teach_advance/utility/colors.dart' as colors;
 
-getQuestionOnCondition(langeCode, numberOfQuestion,
-    {bool loadMore = false}) async {
+getQuestionOnCondition(langeCode, numberOfQuestion) async {
   final ManageShowingContent manageShowingContentController =
       Get.put(ManageShowingContent());
-  var offset = loadMore ? manageShowingContentController.questionFetchOffset : 0;
   var hasLimit = numberOfQuestion.toString().trim().isNotEmpty;
   EasyLoading.show(
       indicator: Card(
@@ -87,9 +85,6 @@ getQuestionOnCondition(langeCode, numberOfQuestion,
       'chapter_payload': chapterList.join(","),
       'batch_payload': batchList.join(","),
       'lang_code':langeCode.toString(),
-      'offset': offset.toString(),
-      if (loadMore && manageShowingContentController.questionFetchLastId != null)
-        'last_id': manageShowingContentController.questionFetchLastId.toString(),
       if (hasLimit) 'limit': numberOfQuestion.toString(),
       'onlyPreviousYear':
           (filterListController.filtersMap['onlyPreviousYear'].value == 1)
@@ -101,67 +96,18 @@ getQuestionOnCondition(langeCode, numberOfQuestion,
   var decodedResponse = jsonDecode(response.body);
   var apiData = decodedResponse['data'];
 
-  manageShowingContentController.questionFetchLangeCode = langeCode;
-  manageShowingContentController.questionFetchLimit =
-      hasLimit ? int.parse(numberOfQuestion.toString()) : 0; // 0 = no limit, fetch all
-  manageShowingContentController.questionFetchLastId =
-      decodedResponse['next_id'];
-  manageShowingContentController.questionFetchOffset =
-      int.tryParse(decodedResponse['next_offset']?.toString() ?? '') ??
-          (offset + (apiData as List).length);
-  var hasMoreRaw = decodedResponse['has_more'];
-  manageShowingContentController.hasMoreQuestionsToLoad.value =
-      hasMoreRaw == true || hasMoreRaw == 1 || hasMoreRaw.toString() == 'true';
-
-  if (!loadMore) {
-    if (apiData.length == 0) {
-      EasyLoading.showInfo("No questions found", dismissOnTap: true);
-      return;
-    }
-    manageShowingContentController.questionListForSelection.value = apiData;
-    manageShowingContentController.questionListForSelectionBackup = apiData;
-    manageShowingContentController.questionListVisibleIndex.value = 0;
-    Get.to(() => QuestionSelectionScreen(),
-        arguments: [
-          manageShowingContentController.selectedSetForOperation['set_name'] +
-              " Selection"
-        ],
-        duration: const Duration(milliseconds: 500),
-        transition: Transition.rightToLeft);
-  } else {
-    if (apiData.length == 0) {
-      EasyLoading.showInfo("No more questions found", dismissOnTap: true);
-      return;
-    }
-    var existingRecordIds = manageShowingContentController
-        .questionListForSelectionBackup
-        .map((question) => question['record_id'])
-        .toSet();
-    var newQuestions = apiData
-        .where((question) =>
-            !existingRecordIds.contains(question['record_id']))
-        .toList();
-    if (newQuestions.isEmpty) {
-      EasyLoading.showInfo("No more questions found", dismissOnTap: true);
-      return;
-    }
-    manageShowingContentController.questionListForSelectionBackup = [
-      ...manageShowingContentController.questionListForSelectionBackup,
-      ...newQuestions
-    ];
-    manageShowingContentController.questionListForSelection.value = [
-      ...manageShowingContentController.questionListForSelection,
-      ...newQuestions
-    ];
+  if (apiData.length == 0) {
+    EasyLoading.showInfo("No questions found", dismissOnTap: true);
+    return;
   }
-}
-
-loadMoreQuestions() async {
-  final ManageShowingContent manageShowingContentController =
-      Get.put(ManageShowingContent());
-  var storedLimit = manageShowingContentController.questionFetchLimit;
-  await getQuestionOnCondition(
-      manageShowingContentController.questionFetchLangeCode,
-      storedLimit == 0 ? '' : storedLimit,
-      loadMore: true);
+  manageShowingContentController.questionListForSelection.value = apiData;
+  manageShowingContentController.questionListForSelectionBackup = apiData;
+  manageShowingContentController.questionListVisibleIndex.value = 0;
+  Get.to(() => QuestionSelectionScreen(),
+      arguments: [
+        manageShowingContentController.selectedSetForOperation['set_name'] +
+            " Selection"
+      ],
+      duration: const Duration(milliseconds: 500),
+      transition: Transition.rightToLeft);
 }

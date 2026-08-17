@@ -11,11 +11,6 @@ class ManageShowingContent extends GetxController {
   RxList questionListForSelection = []
       .obs; // ye variable responsible hai ... kaun sa questions selection ke liye available hai
   List questionListForSelectionBackup = [];
-  dynamic questionFetchLastId; // API se aaya "next_id", "Load More" par "last_id" ke roop me wapas bhejna hai
-  int questionFetchOffset = 0; // API se aaya "next_offset", "Load More" par "offset" ke roop me wapas bhejna hai
-  int questionFetchLimit = 10; // ek baar me kitne question fetch karne hain (0 = no limit, fetch all)
-  int questionFetchLangeCode = 1; // last used language code, "Load More" par same filter reuse karne ke liye
-  RxBool hasMoreQuestionsToLoad = true.obs; // API ke "has_more" flag se control hota hai
   RxInt questionViewMode = 1
       .obs; // two mode → viewQuestionDefaultMode and listMode; 0 = listMode and 1 = viewQuestionDefaultMode;
   RxList selectedQuestions = []
