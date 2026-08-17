@@ -31,6 +31,7 @@ import 'package:teach_advance/utility/question_select_checkbox_all_time_used_lis
 import 'package:teach_advance/utility/report_error_modal.dart';
 import 'package:teach_advance/utility/select_all_question_button.dart';
 import 'package:teach_advance/utility/set_setting_modal.dart';
+import 'package:teach_advance/utility/update_dialog.dart';
 
 import 'language_toggle_button.dart';
 import 'solutionBoxWidget.dart';
@@ -39,12 +40,6 @@ final ManageShowingContent manageShowingContent =
     Get.put(ManageShowingContent());
 
 Widget questionAndOptionAndSolutionWeb(questionsList) {
-  if (questionsList.isEmpty) {
-    return const Padding(
-      padding: EdgeInsets.all(10),
-      child: Text("Question data not found"),
-    );
-  }
   return questionsList[manageShowingContent.questionListVisibleIndex.value][
               manageShowingContent.language.value == "hin"
                   ? "question_hin"
@@ -75,7 +70,7 @@ Widget questionAndOptionAndSolutionWeb(questionsList) {
                               Clipboard.setData(ClipboardData(
                                       text: questionsList[manageShowingContent
                                           .questionListVisibleIndex
-                                          .value]["record_id"].toString()))
+                                          .value]["record_id"]))
                                   .then((_) {
                                 EasyLoading.showToast("Question's id copied");
                               });
@@ -209,12 +204,6 @@ Widget questionAndOptionAndSolutionWeb(questionsList) {
 }
 
 Widget questionAndOptionAndSolution(questionsList) {
-  if (questionsList.isEmpty) {
-    return const Padding(
-      padding: EdgeInsets.all(10),
-      child: Text("Question data not found"),
-    );
-  }
   return questionsList[manageShowingContent.questionListVisibleIndex.value][
               manageShowingContent.language.value == "hin"
                   ? "question_hin"
@@ -257,20 +246,28 @@ Widget questionAndOptionAndSolution(questionsList) {
                                Text( questionsList[
                                manageShowingContent
                                    .questionListVisibleIndex
-                                   .value]["record_id"].toString()),
+                                   .value]["record_id"]),
                               InkWell(
                                   onTap: () {
                                     Clipboard.setData(ClipboardData(
                                             text: questionsList[
                                                 manageShowingContent
                                                     .questionListVisibleIndex
-                                                    .value]["record_id"].toString()))
+                                                    .value]["record_id"]))
                                         .then((_) {
                                       EasyLoading.showToast(
                                           "Question's id copied");
                                     });
                                   },
-                                  child: Icon(Icons.copy))
+                                  child: Icon(Icons.copy)),
+                              InkWell(
+                                  onTap: () {
+                                    openSupportUrl(
+                                        "https://support.utkarshapp.com/auth_panel/question_bank/question_bank/edit_question?config_id=${questionsList[manageShowingContent.questionListVisibleIndex.value]["record_id"]}");
+                                  },
+                                  child: const Padding(
+                                      padding: EdgeInsets.only(left: 6.0),
+                                      child: Icon(Icons.open_in_new)))
                             ],
                           )
                         ],
@@ -407,37 +404,31 @@ Widget topbar1(context, icon, setName, screenName, isSaveShow) {
         Row(
           children: [
             !isSaveShow
-                ? MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: GestureDetector(
-                      onTap: () async {
-                        saveSelectedQuestionsAPI();
-                      },
-                      child: containerPro(
-                        paddingOnly(
-                            2.0,
-                            4.0,
-                            2.0,
-                            4.0,
-                            Obx(() => Text(
-                                  "Save: ${manageShowingContent.selectedQuestions.length}",
-                                  style: TextStyle(
-                                    fontSize: 10.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blueGrey.shade900,
-                                    fontFamily: "serif",
-                                  ),
-                                ))),
-                        Colors.white,
-                        Colors.transparent,
-                        2.0,
-                        2.0,
-                      ),
+                ? GestureDetector(
+                    onTap: () async {
+                      saveSelectedQuestionsAPI();
+                    },
+                    child: containerPro(
+                      paddingOnly(
+                          2.0,
+                          4.0,
+                          2.0,
+                          4.0,
+                          Obx(() => Text(
+                                "Save: ${manageShowingContent.selectedQuestions.length}",
+                                style: TextStyle(
+                                  fontSize: 10.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blueGrey.shade900,
+                                  fontFamily: "serif",
+                                ),
+                              ))),
+                      Colors.white,
+                      Colors.transparent,
+                      2.0,
+                      2.0,
                     ),
                   )
-                : Container(),
-            !isSaveShow
-                ? const SizedBox(width: 10.0)
                 : Container(),
             (screenName == "question_selection_screen")
                 ? selectAllQuestionWidget()
@@ -559,10 +550,6 @@ Widget topbar2(
                   4.0,
                   GestureDetector(
                     onTap: () {
-                      if (manageShowingContent
-                          .questionListForSelection.isEmpty) {
-                        return;
-                      }
                       showJumpingPositions(
                           manageShowingContent.questionListForSelection[
                               manageShowingContent
@@ -596,9 +583,6 @@ Widget topbar2(
             4.0,
             GestureDetector(
               onTap: () {
-                if (manageShowingContent.questionListForSelection.isEmpty) {
-                  return;
-                }
                 reportErrorModal(manageShowingContent.questionListForSelection[
                         manageShowingContent.questionListVisibleIndex.value]
                     ['record_id']);
