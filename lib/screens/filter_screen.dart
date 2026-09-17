@@ -289,7 +289,8 @@ class FilterScreen extends StatelessWidget {
                       return;
                     }
 
-                    await getQuestionOnCondition(langeCode);
+                    await getQuestionOnCondition(
+                        filterListController.filtersMap['language'].value);
                   },
                   text: "Get Questions",
                   textStyle: const TextStyle(

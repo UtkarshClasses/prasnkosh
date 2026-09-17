@@ -33,6 +33,19 @@ getSelectedLevelAPI(setId) async {
     filterListController.filtersMap["Topic"]['selected_item'].value =
         _joinedStringToDataList(
             responseData['topic_ids'], responseData['topic_name']);
+
+    var savedCity = responseData['city'];
+    if (savedCity != null && savedCity.toString().isNotEmpty) {
+      filterListController.filtersMap['selectedCity'].value = savedCity;
+      filterListController.filtersMap["City"]['selected_item'].value = [
+        Data(id: "0", title: savedCity, coverImage: "")
+      ];
+    }
+    var savedLanguage = responseData['language'];
+    if (savedLanguage != null) {
+      filterListController.filtersMap['language'].value =
+          int.tryParse(savedLanguage.toString()) ?? 1;
+    }
   }
 }
 

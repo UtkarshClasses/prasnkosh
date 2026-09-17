@@ -75,7 +75,9 @@ saveSelectedQuestionsAPI() async {
       'exam_name': examNameList.isEmpty ? "" : examNameList.join("#-#"),
       'subject_name': subjectNameList.isEmpty ? "" : subjectNameList.join("#-#"),
       'chapter_name': chapterNameList.isEmpty ? "" : chapterNameList.join("#-#"),
-      'topic_name': topicNameList.isEmpty ? "" : topicNameList.join("#-#")
+      'topic_name': topicNameList.isEmpty ? "" : topicNameList.join("#-#"),
+      'city': filterListController.filtersMap['selectedCity'].value,
+      'language': filterListController.filtersMap['language'].value.toString(),
     },
   );
   EasyLoading.dismiss();
