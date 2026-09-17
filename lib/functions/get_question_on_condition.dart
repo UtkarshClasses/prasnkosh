@@ -11,10 +11,9 @@ import '../controllers/manage_showing_content.dart';
 import '../screens/question_selection_screen.dart';
 import 'package:teach_advance/utility/colors.dart' as colors;
 
-getQuestionOnCondition(langeCode, numberOfQuestion) async {
+getQuestionOnCondition(langeCode) async {
   final ManageShowingContent manageShowingContentController =
       Get.put(ManageShowingContent());
-  var hasLimit = numberOfQuestion.toString().trim().isNotEmpty;
   EasyLoading.show(
       indicator: Card(
           shadowColor: Colors.blueGrey.shade100,
@@ -85,7 +84,6 @@ getQuestionOnCondition(langeCode, numberOfQuestion) async {
       'chapter_payload': chapterList.join(","),
       'batch_payload': batchList.join(","),
       'lang_code':langeCode.toString(),
-      if (hasLimit) 'limit': numberOfQuestion.toString(),
       'onlyPreviousYear':
           (filterListController.filtersMap['onlyPreviousYear'].value == 1)
               ? true.toString()

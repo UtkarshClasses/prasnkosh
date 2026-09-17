@@ -25,7 +25,6 @@ class FilterScreen extends StatelessWidget {
   FilterScreen({super.key});
 
   int langeCode = 1;
-  static const int numberOfQuestionsLimit = 50;
   final List<Data> data12 = [
     Data(id: "0", title: "Jodhpur", coverImage: ""),
     Data(id: "0", title: "Jaipur", coverImage: ""),
@@ -290,8 +289,7 @@ class FilterScreen extends StatelessWidget {
                       return;
                     }
 
-                    await getQuestionOnCondition(
-                        langeCode, numberOfQuestionsLimit.toString());
+                    await getQuestionOnCondition(langeCode);
                   },
                   text: "Get Questions",
                   textStyle: const TextStyle(
