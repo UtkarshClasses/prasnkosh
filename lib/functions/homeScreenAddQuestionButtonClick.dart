@@ -35,4 +35,7 @@ settingUpManageShowingContentController() {
   for (var category in ["Batch", "Exam", "Subject", "Chapter", "Topic"]) {
     filterListController.filtersMap[category]['selected_item'].value = [];
   }
+  filterListController.filtersMap["City"]['selected_item'].value = [];
+  filterListController.filtersMap['selectedCity'].value = "Jodhpur";
+  filterListController.filtersMap['language'].value = 1;
 }
